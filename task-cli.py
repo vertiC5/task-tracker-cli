@@ -162,52 +162,58 @@ def list_func(arg):
         task_match = task_list
 
     print("ID: Task - status")
-    for task in task_match:
-        print(f"{task['id']}: {task['task']} - {task['status']} (Created: {task['createdAt']}, Updated: {task['updatedAt']})")
+    if task_match:
+        for task in task_match:
+            print(f"{task['id']}: {task['task']} - {task['status']} (Created: {task['createdAt']}, Updated: {task['updatedAt']})")
+    else:
+        print(f"No entries for \"{arg.status}\" found")
 
-parser = argparse.ArgumentParser(description="Task Tracker CLI")
-subparsers = parser.add_subparsers()
+def main():
+    parser = argparse.ArgumentParser(description="Task Tracker CLI")
+    subparsers = parser.add_subparsers()
 
-# Initialize Command
-init = subparsers.add_parser('init', help='Initialize task tracker')
-init.set_defaults(func=init_func)
+    # Initialize Command
+    init = subparsers.add_parser('init', help='Initialize task tracker')
+    init.set_defaults(func=init_func)
 
-# Add Command
-add = subparsers.add_parser('add', help='Add a new task')
-add.add_argument('task', type=str, help = 'Task detail to add')
-add.set_defaults(func=add_func)
+    # Add Command
+    add = subparsers.add_parser('add', help='Add a new task')
+    add.add_argument('task', type=str, help = 'Task detail to add')
+    add.set_defaults(func=add_func)
 
-# Update Command
-update = subparsers.add_parser('update', help='Update a task by ID')
-update.add_argument('id', type=int, help='ID of the task to update')
-update.add_argument('task', type=str, help='Updated task detail')
-update.set_defaults(func=update_func)
+    # Update Command
+    update = subparsers.add_parser('update', help='Update a task by ID')
+    update.add_argument('id', type=int, help='ID of the task to update')
+    update.add_argument('task', type=str, help='Updated task detail')
+    update.set_defaults(func=update_func)
 
-# Delete Command
-delete = subparsers.add_parser('delete', help='Delete a task by ID')
-delete.add_argument('id', type=int, help='ID of the task to delete')
-delete.set_defaults(func=delete_func)
+    # Delete Command
+    delete = subparsers.add_parser('delete', help='Delete a task by ID')
+    delete.add_argument('id', type=int, help='ID of the task to delete')
+    delete.set_defaults(func=delete_func)
 
-# mark-in-progress command
-mark_in_progress = subparsers.add_parser('mark-in-progress', help='Mark a task as in progress by ID')
-mark_in_progress.add_argument('id', type=int, help='ID of the task to mark as in progress')
-mark_in_progress.set_defaults(func=mark_in_progress_func)
+    # mark-in-progress command
+    mark_in_progress = subparsers.add_parser('mark-in-progress', help='Mark a task as in progress by ID')
+    mark_in_progress.add_argument('id', type=int, help='ID of the task to mark as in progress')
+    mark_in_progress.set_defaults(func=mark_in_progress_func)
 
-# mark-done command
-mark_done = subparsers.add_parser('mark-done', help='Mark a task as done by ID')
-mark_done.add_argument('id', type=int, help='ID of the task to mark as done')
-mark_done.set_defaults(func=mark_done_func)
+    # mark-done command
+    mark_done = subparsers.add_parser('mark-done', help='Mark a task as done by ID')
+    mark_done.add_argument('id', type=int, help='ID of the task to mark as done')
+    mark_done.set_defaults(func=mark_done_func)
 
-# mark-to do command
-mark_todo = subparsers.add_parser('mark-todo', help='Mark a task as to do by ID')
-mark_todo.add_argument('id', type=int, help='ID of the task to mark as to do')
-mark_todo.set_defaults(func=mark_todo_func)
+    # mark-to do command
+    mark_todo = subparsers.add_parser('mark-todo', help='Mark a task as to do by ID')
+    mark_todo.add_argument('id', type=int, help='ID of the task to mark as to do')
+    mark_todo.set_defaults(func=mark_todo_func)
 
-# list command
-list_cmd = subparsers.add_parser('list', help='List all tasks')
-list_cmd.add_argument("status", nargs='?', type=str, choices=["done", "todo", "in-progress"], help='Filter by status')
-list_cmd.set_defaults(func=list_func)
+    # list command
+    list_cmd = subparsers.add_parser('list', help='List all tasks')
+    list_cmd.add_argument("status", nargs='?', type=str, choices=["done", "todo", "in-progress"], help='Filter by status')
+    list_cmd.set_defaults(func=list_func)
 
-args = parser.parse_args()
-args.func(args)
+    args = parser.parse_args()
+    args.func(args)
 
+if __name__ == "__main__":
+    main()
